@@ -1,0 +1,12 @@
+.mainLayout {
+  display: flex;
+}
+
+.content {
+  flex-grow: 1;
+}
+
+main {
+  flex: 1;
+  padding: 20px;
+}
