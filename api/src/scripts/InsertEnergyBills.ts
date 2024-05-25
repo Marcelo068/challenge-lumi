@@ -34,7 +34,7 @@ async function insertEnergyBills(): Promise<void> {
   try {
     const text = "categorize os valores: numero_do_cliente, mes_de_referencia, energia_eletrica_kwh, energia_eletrica_rs, energia_scee_s_icms_kwh, energia_scee_s_icms_rs, energia_compensada_gd_i_kwh, energia_compensada_gd_i_rs, contrib_ilum_publica_municipal_rs, numero_da_instalacao, data_de_emissao, vencimento, total_a_pagar. O retorno deve ser em json. No texto a seguir:"
 
-    const response: any = await getEnergyBillsInfo('./3000055479-01-2023.pdf', text)
+    const response: any = await getEnergyBillsInfo('./3004298116-01-2023.pdf', text)
 
     const formattedResponse: object ={
       numeroCliente: response.numero_do_cliente,

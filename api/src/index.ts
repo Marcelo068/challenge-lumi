@@ -1,10 +1,12 @@
 import express from 'express';
+import cors from 'cors';
 import { AppDataSource } from './data-source';
 import energyBillsRouter from './routes/EnergyBillsController';
 
 const app = express();
 const port = 3000;
 
+app.use(cors());
 app.use(express.json());
 
 AppDataSource.initialize()

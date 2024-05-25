@@ -2,6 +2,8 @@ import { Repository } from 'typeorm';
 import { EnergyBills } from '../entitys/EnergyBillsEntity';
 import { AppDataSource } from '../data-source';
 
+import { EnergyBillChartsDto } from './dto/EnergyBillChartsDto';
+
 export class EnergyBillsService {
   private energyBillsRepository: Repository<EnergyBills>;
 
@@ -13,23 +15,35 @@ export class EnergyBillsService {
     return await this.energyBillsRepository.save(energyBillData);
   }
 
-  async getEnergyBills(): Promise<EnergyBills[]> {
-    return await this.energyBillsRepository.find();
+  async getEnergyBills(numeroCliente?: string, skip = 0, take = 10): Promise<{ data: EnergyBills[], total: number }> {
+    const [data, total] = await this.energyBillsRepository.findAndCount({
+      where: { numeroCliente },
+      skip,
+      take,
+    });
+    return { data, total };
   }
 
-  async getEnergyBillingDataForCharts(): Promise<EnergyBills[]> {
+  async getEnergyBillingDataForCharts(numeroCliente?: string): Promise<EnergyBillChartsDto[]> {
+    let energyBills;
 
-    const energyBills = await this.energyBillsRepository.find();
+    if (numeroCliente) {
+      energyBills = await this.energyBillsRepository.find({ where: { numeroCliente } });
+    } else {
+      energyBills = await this.energyBillsRepository.find();
+    }
 
     const processedEnergyBills = energyBills.map(bill => {
+      const numeroCliente = bill.numeroCliente
       const energiaEletricaKWh = parseFloat(bill.energiaEletricaKWh);
       const energiaSCEEKWh = parseFloat(bill.energiaSCEEKWh);
       const energiaCompensadaGDIKWh = parseFloat(bill.energiaCompensadaGDIKWh);
 
       const energiaEletricaReais = parseFloat(bill.energiaEletricaReais.replace(',', '.'));
       const energiaSCEEReais = parseFloat(bill.energiaSCEEReais.replace(',', '.'));
-      const energiaCompensadaGDIReais = parseFloat(bill.energiaCompensadaGDIReais.replace(',', '.'));
       const contribuicaoIlumPublica = parseFloat(bill.contribuicaoIlumPublica.replace(',', '.'));
+
+      const energiaCompensadaGDIReais = parseFloat(bill.energiaCompensadaGDIReais.replace(',', '.'));
 
       const consumoEnergiaEletricaKWh = energiaEletricaKWh + energiaSCEEKWh;
       const energiaCompensadaKWh = energiaCompensadaGDIKWh;
@@ -37,7 +51,7 @@ export class EnergyBillsService {
       const economiaGDReais = energiaCompensadaGDIReais;
 
       return {
-        ...bill,
+        numeroCliente,
         consumoEnergiaEletricaKWh,
         energiaCompensadaKWh,
         valorTotalSemGDReais,
@@ -45,8 +59,6 @@ export class EnergyBillsService {
       };
     });
 
-    console.log(processedEnergyBills)
-
-    return await this.energyBillsRepository.find();
+    return processedEnergyBills
   }
 }
