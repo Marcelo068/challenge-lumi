@@ -16,13 +16,19 @@ export class EnergyBillsService {
   }
 
   async getEnergyBills(numeroCliente?: string, skip = 0, take = 10): Promise<{ data: EnergyBills[], total: number }> {
-    const [data, total] = await this.energyBillsRepository.findAndCount({
-      where: { numeroCliente },
+    let queryOptions: any = {
       skip,
       take,
-    });
+    };
+  
+    if (numeroCliente) {
+      queryOptions.where = { numeroCliente };
+    }
+  
+    const [data, total] = await this.energyBillsRepository.findAndCount(queryOptions);
     return { data, total };
   }
+  
 
   async getEnergyBillingDataForCharts(numeroCliente?: string): Promise<EnergyBillChartsDto[]> {
     let energyBills;
