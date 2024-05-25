@@ -1,18 +1,37 @@
+// services/EnergyBillsService.spec.ts
 import { EnergyBillsService } from './EnergyBillsService';
-import { MockEnergyBillsRepository } from '../utils/MockEnergyBillsRepository';
+import { Repository } from 'typeorm';
+import { EnergyBills } from '../entitys/EnergyBillsEntity';
 
 describe('EnergyBillsService', () => {
   let energyBillsService: EnergyBillsService;
-  let mockEnergyBillsRepository: MockEnergyBillsRepository;
+  let energyBillsRepository: Partial<Repository<EnergyBills>>;
 
   beforeEach(() => {
-    mockEnergyBillsRepository = new MockEnergyBillsRepository();
-    energyBillsService = new EnergyBillsService(mockEnergyBillsRepository as any);
+    energyBillsRepository = {
+      save: jest.fn(),
+    };
+
+    energyBillsService = new EnergyBillsService(energyBillsRepository as any);
   });
 
-  it('should get energyBills', async () => {
-    const energyBills = await energyBillsService.getEnergyBills();
+  describe('createEnergyBills', () => {
+    it('should create and return an energy bill', async () => {
+      const energyBillData: Partial<EnergyBills> = {
+        numeroCliente: '123456',
+        mesReferencia: '01-2023',
+        energiaEletricaKWh: '1000',
+        energiaEletricaReais: '500',
+      };
 
-    expect(energyBills).toEqual([]);
+      const savedEnergyBill: EnergyBills = energyBillData as EnergyBills;
+
+      (energyBillsRepository.save as jest.Mock).mockResolvedValue(savedEnergyBill);
+
+      const result = await energyBillsService.createEnergyBills(energyBillData);
+
+      expect(result).toEqual(savedEnergyBill);
+      expect(energyBillsRepository.save).toHaveBeenCalledWith(energyBillData);
+    });
   });
 });
