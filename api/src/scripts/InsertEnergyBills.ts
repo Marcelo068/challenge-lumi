@@ -1,15 +1,14 @@
+import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-
-const envPath = path.resolve(__dirname, '../../.env');
-console.log('envPath:', envPath);
-
-dotenv.config({ path: envPath });
 
 import { AppDataSource } from '../data-source';
 import { extractTextFromPDF } from '../utils/ExtractTextFromPDF';
 import { callChatGPT } from '../utils/ChatgptFunction';
 import { EnergyBillsService } from '../services/EnergyBillsService';
+
+const envPath = path.resolve(__dirname, '../../.env');
+dotenv.config({ path: envPath });
 
 
 const energyBillsService = new EnergyBillsService();
@@ -30,11 +29,11 @@ async function getEnergyBillsInfo(pdfPath: string, chatGPTText: string): Promise
   }
 }
 
-async function insertEnergyBills(): Promise<void> {
+async function insertEnergyBills(pdfPath: string): Promise<void> {
   try {
     const text = "categorize os valores: numero_do_cliente, mes_de_referencia, energia_eletrica_kwh, energia_eletrica_rs, energia_scee_s_icms_kwh, energia_scee_s_icms_rs, energia_compensada_gd_i_kwh, energia_compensada_gd_i_rs, contrib_ilum_publica_municipal_rs, numero_da_instalacao, data_de_emissao, vencimento, total_a_pagar. O retorno deve ser em json. No texto a seguir:"
 
-    const response: any = await getEnergyBillsInfo('./3004298116-01-2023.pdf', text)
+    const response: any = await getEnergyBillsInfo(pdfPath, text)
 
     const formattedResponse: object ={
       numeroCliente: response.numero_do_cliente,
@@ -59,12 +58,24 @@ async function insertEnergyBills(): Promise<void> {
   }
 }
 
+async function extractTextFromAllPDFsInFolder(folderPath: string): Promise<void> {
+  const files = fs.readdirSync(folderPath);
+  const pdfFiles = files.filter(file => path.extname(file).toLowerCase() === '.pdf');
+  
+  for (const pdfFile of pdfFiles) {
+    const pdfPath = path.join(folderPath, pdfFile);
+    await insertEnergyBills(pdfPath);
+  }
+}
+
 AppDataSource.initialize()
   .then(async () => {
     console.log('Data Source has been initialized!');
-    await insertEnergyBills()
+    await extractTextFromAllPDFsInFolder('../public')
   })
   .catch((err) => {
     console.error('Error during Data Source initialization:', err);
   });
+
+
 
