@@ -21,9 +21,8 @@ async function getEnergyBillsInfo(pdfPath: string, chatGPTText: string): Promise
 
     const respostaChatGPT = await callChatGPT(resultString);
 
-    const parsedResponse = JSON.parse(respostaChatGPT);
-
-    return parsedResponse;
+    const parsedObject = JSON.parse(respostaChatGPT);
+    return parsedObject;
   } catch (error: any) {
     throw error;
   }
@@ -35,7 +34,7 @@ async function insertEnergyBills(pdfPath: string): Promise<void> {
 
     const response: any = await getEnergyBillsInfo(pdfPath, text)
 
-    const formattedResponse: object ={
+    const formattedResponse: object = {
       numeroCliente: response.numero_do_cliente,
       mesReferencia: response.mes_de_referencia,
       energiaEletricaKWh: response.energia_eletrica_kwh,
@@ -48,10 +47,12 @@ async function insertEnergyBills(pdfPath: string): Promise<void> {
       numeroInstalacao: response.numero_da_instalacao,
       dataEmissao: response.data_de_emissao,
       vencimento: response.vencimento,
-      totalPagar: response.total_a_pagar
+      totalPagar: response.total_a_pagar,
+      fileName: path.basename(pdfPath)
     }
 
     await energyBillsService.createEnergyBills(formattedResponse);
+    console.log(`Energy Bill inserted: ${pdfPath}`)
 
   } catch (error: any) {
     throw error;
@@ -61,9 +62,10 @@ async function insertEnergyBills(pdfPath: string): Promise<void> {
 async function extractTextFromAllPDFsInFolder(folderPath: string): Promise<void> {
   const files = fs.readdirSync(folderPath);
   const pdfFiles = files.filter(file => path.extname(file).toLowerCase() === '.pdf');
-  
+
   for (const pdfFile of pdfFiles) {
     const pdfPath = path.join(folderPath, pdfFile);
+
     await insertEnergyBills(pdfPath);
   }
 }
@@ -72,6 +74,7 @@ AppDataSource.initialize()
   .then(async () => {
     console.log('Data Source has been initialized!');
     await extractTextFromAllPDFsInFolder('../public')
+    console.log('All PDFs have been processed!');
   })
   .catch((err) => {
     console.error('Error during Data Source initialization:', err);

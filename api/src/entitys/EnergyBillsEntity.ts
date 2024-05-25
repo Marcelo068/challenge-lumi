@@ -5,6 +5,9 @@ export class EnergyBills {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ name: 'file_name', nullable: true })
+  fileName: string;
+
   @Column({ name: 'numero_do_cliente', nullable: true })
   numeroCliente: string;
 

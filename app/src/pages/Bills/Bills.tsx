@@ -16,7 +16,7 @@ interface Item {
   id: string;
   numeroCliente: string;
   mesReferencia: string;
-  filePath: string; // Adicionando filePath ao Item para o caminho do arquivo
+  fileName: string; // Adicionando filePath ao Item para o caminho do arquivo
 }
 
 const ITEMS_PER_PAGE = 10;
@@ -87,7 +87,7 @@ const Bills: React.FC = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleDownload('')}
+                    onClick={() => handleDownload(`${process.env.REACT_APP_API_URL}/files/${item.fileName}`)}
                   >
                     Baixar Arquivo
                   </Button>

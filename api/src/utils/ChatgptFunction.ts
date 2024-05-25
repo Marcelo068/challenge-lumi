@@ -12,7 +12,8 @@ export async function callChatGPT(text: string): Promise<string> {
 
     const bodyMessage = {
       model: idModel,
-      messages: [{ role: 'user', content: text }]
+      messages: [{ role: 'user', content: text }],
+      temperature: 0.1
     };
 
     const response: AxiosResponse<any> = await axios.post(link, bodyMessage, { headers });
