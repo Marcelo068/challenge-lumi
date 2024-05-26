@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import axios from 'axios';
 import Dashboard from './Dashboard';
@@ -12,12 +13,14 @@ describe('Dashboard', () => {
       energiaCompensadaKWh: 50,
       valorTotalSemGDReais: 200,
       economiaGDReais: 75,
+      dataEmissao: '01/01/2021',
     },
     {
       consumoEnergiaEletricaKWh: 150,
       energiaCompensadaKWh: 60,
       valorTotalSemGDReais: 250,
       economiaGDReais: 85,
+      dataEmissao: '01/02/2021',
     },
   ];
 
@@ -45,9 +48,9 @@ describe('Dashboard', () => {
       });
     });
 
-    expect(screen.getAllByText('Consumo de Energia Elétrica')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('Energia Elétrica')[0]).toBeInTheDocument();
     expect(screen.getAllByText('Energia Compensada')[0]).toBeInTheDocument();
-    expect(screen.getAllByText('Valor Total sem GD')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('Total sem GD')[0]).toBeInTheDocument();
     expect(screen.getAllByText('Economia GD')[0]).toBeInTheDocument();
   });
 });

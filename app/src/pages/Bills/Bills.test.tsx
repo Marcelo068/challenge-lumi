@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import axios from 'axios';
 import Bills from './Bills';
@@ -84,11 +85,11 @@ describe('Bills', () => {
     );
 
     await waitFor(() => {
-      const downloadButtons = screen.getAllByText('Baixar Arquivo');
-      expect(downloadButtons.length).toBeGreaterThan(0); 
+      const downloadButtons = screen.getAllByRole('button', { name: /Baixar Arquivo/i });
+      expect(downloadButtons.length).toBeGreaterThan(0);
     });
 
-    const downloadButtons = screen.getAllByText('Baixar Arquivo');
+    const downloadButtons = screen.getAllByRole('button', { name: /Baixar Arquivo/i });
     const firstDownloadButton = downloadButtons[0];
 
     await act(async () => {
