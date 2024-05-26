@@ -1,201 +1,189 @@
-// services/EnergyBillsService.spec.ts
-import { EnergyBillsService } from './EnergyBillsService';
-import { Repository } from 'typeorm';
 import { EnergyBills } from '../entitys/EnergyBillsEntity';
+import { EnergyBillsService } from './EnergyBillsService';
+import { MockEnergyBillsRepository } from '../mock/MockEnergyBillsRepository';
 
 describe('EnergyBillsService', () => {
   let energyBillsService: EnergyBillsService;
-  let energyBillsRepository: Partial<Repository<EnergyBills>>;
+  let mockRepository: MockEnergyBillsRepository;
 
   beforeEach(() => {
-    energyBillsRepository = {
-      save: jest.fn(),
-      findAndCount: jest.fn(),
-      find: jest.fn(),
-    };
-
-    energyBillsService = new EnergyBillsService(energyBillsRepository as any);
+    mockRepository = new MockEnergyBillsRepository();
+    energyBillsService = new EnergyBillsService(mockRepository as any);
   });
 
   describe('createEnergyBills', () => {
-    it('should create and return an energy bill', async () => {
-      const energyBillData: Partial<EnergyBills> = {
-        numeroCliente: '123456',
-        mesReferencia: '01-2023',
-        energiaEletricaKWh: '1000',
-        energiaEletricaReais: '500',
+    it('should create a new energy bill', async () => {
+      const energyBillData = {
+        numeroCliente: '123',
+        mesReferencia: '04/2023',
+        energiaEletricaKWh: '600',
+        energiaEletricaReais: '300,00',
+        energiaSCEEKWh: '120',
+        energiaSCEEReais: '60,00',
+        energiaCompensadaGDIKWh: '60',
+        energiaCompensadaGDIReais: '30,00',
+        contribuicaoIlumPublica: '12,00',
+        numeroInstalacao: '3000055481',
+        dataEmissao: '2023-04-05',
+        vencimento: '2023-04-15',
+        totalPagar: '402,00',
+        fileName: ''
       };
 
-      (energyBillsRepository.save as jest.Mock).mockResolvedValue(energyBillData);
+      const createdEnergyBill = await energyBillsService.createEnergyBills(energyBillData);
 
-      const result = await energyBillsService.createEnergyBills(energyBillData);
+      const expectedEnergyBill = {
+        ...energyBillData,
+        id: expect.any(String),
+      };
 
-      expect(result).toEqual(energyBillData);
-      expect(energyBillsRepository.save).toHaveBeenCalledWith(energyBillData);
+      expect(createdEnergyBill).toEqual(expectedEnergyBill);
     });
   });
 
+  const mockEnergyBills: EnergyBills[] = [
+    {
+      id: '1',
+      numeroCliente: '123',
+      mesReferencia: '01/2023',
+      energiaEletricaKWh: '500',
+      energiaEletricaReais: '250.00',
+      energiaSCEEKWh: '100',
+      energiaSCEEReais: '50.00',
+      energiaCompensadaGDIKWh: '50',
+      energiaCompensadaGDIReais: '25.00',
+      contribuicaoIlumPublica: '10.00',
+      numeroInstalacao: '3000055479',
+      dataEmissao: '2023-01-05',
+      vencimento: '2023-01-15',
+      totalPagar: '335.00',
+      fileName: ''
+    },
+    {
+      id: '2',
+      numeroCliente: '456',
+      mesReferencia: '02/2023',
+      energiaEletricaKWh: '600',
+      energiaEletricaReais: '300.00',
+      energiaSCEEKWh: '120',
+      energiaSCEEReais: '60.00',
+      energiaCompensadaGDIKWh: '60',
+      energiaCompensadaGDIReais: '30.00',
+      contribuicaoIlumPublica: '12.00',
+      numeroInstalacao: '3000055480',
+      dataEmissao: '2023-02-05',
+      vencimento: '2023-02-15',
+      totalPagar: '402.00',
+      fileName: ''
+    },
+    {
+      id: '3',
+      numeroCliente: '123',
+      mesReferencia: '03/2023',
+      energiaEletricaKWh: '550',
+      energiaEletricaReais: '275.00',
+      energiaSCEEKWh: '110',
+      energiaSCEEReais: '55.00',
+      energiaCompensadaGDIKWh: '55',
+      energiaCompensadaGDIReais: '27.50',
+      contribuicaoIlumPublica: '11.00',
+      numeroInstalacao: '3000055479',
+      dataEmissao: '2023-03-05',
+      vencimento: '2023-03-15',
+      totalPagar: '368.50',
+      fileName: ''
+    },
+  ];
+
   describe('getEnergyBills', () => {
-    it('should return energy bills with default pagination and filtered by client number', async () => {
-      const mockEnergyBills = [
-        {
-          numeroCliente: '123456',
-          mesReferencia: '01-2023',
-          energiaEletricaKWh: '1000',
-          energiaEletricaReais: '500',
-        },
-        {
-          numeroCliente: '123456',
-          mesReferencia: '02-2023',
-          energiaEletricaKWh: '1200',
-          energiaEletricaReais: '600',
-        },
-      ];
-  
-      const mockTotalCount = 2;
-  
-      (energyBillsRepository.findAndCount as jest.Mock).mockResolvedValue([mockEnergyBills, mockTotalCount]);
-  
-      const { data, total } = await energyBillsService.getEnergyBills('123456');
-  
-      expect(data).toEqual(mockEnergyBills);
-      expect(total).toEqual(mockTotalCount);
-      expect(energyBillsRepository.findAndCount).toHaveBeenCalledWith({
-        skip: 0,
-        take: 10,
-        where: { numeroCliente: '123456' },
-      });
+    it('should return energy bills with total count', async () => {
+      mockRepository['energyBills'] = mockEnergyBills;
+
+      const { data, total } = await energyBillsService.getEnergyBills('123');
+
+      expect(data.length).toBe(2);
+      expect(total).toBe(2);
     });
-  
-    it('should return energy bills with default pagination when no client number filter is provided', async () => {
-      const mockEnergyBills = [
-        {
-          numeroCliente: '789012',
-          mesReferencia: '01-2023',
-          energiaEletricaKWh: '1500',
-          energiaEletricaReais: '700',
-        },
-        {
-          numeroCliente: '789012',
-          mesReferencia: '02-2023',
-          energiaEletricaKWh: '1300',
-          energiaEletricaReais: '650',
-        },
-      ];
-  
-      const mockTotalCount = 2;
-  
-      (energyBillsRepository.findAndCount as jest.Mock).mockResolvedValue([mockEnergyBills, mockTotalCount]);
-  
+
+    it('should return all energy bills when no client number is provided', async () => {
+      mockRepository['energyBills'] = mockEnergyBills;
+
       const { data, total } = await energyBillsService.getEnergyBills();
-  
-      expect(data).toEqual(mockEnergyBills);
-      expect(total).toEqual(mockTotalCount);
-      expect(energyBillsRepository.findAndCount).toHaveBeenCalledWith({
-        skip: 0,
-        take: 10,
-      });
+
+      expect(data.length).toBe(mockEnergyBills.length);
+      expect(total).toBe(mockEnergyBills.length);
+    });
+
+    it('should return energy bills with pagination', async () => {
+      mockRepository['energyBills'] = mockEnergyBills;
+
+      const skip = 1;
+      const take = 2;
+      const { data, total } = await energyBillsService.getEnergyBills(undefined, skip, take);
+
+      expect(data.length).toBe(take);
+      expect(total).toBe(mockEnergyBills.length);
+      expect(data[0].id).toBe(mockEnergyBills[skip].id);
     });
   });
 
   describe('getEnergyBillingDataForCharts', () => {
-    it('should return processed energy billing data for charts with client number filter', async () => {
-      const mockEnergyBills = [
+    it('should return processed energy billing data for a specific client', async () => {
+      mockRepository['energyBills'] = mockEnergyBills;
+
+      const numeroCliente = '123';
+      const processedData = await energyBillsService.getEnergyBillingDataForCharts(numeroCliente);
+
+      const expectedData = [
         {
-          numeroCliente: '123456',
-          energiaEletricaKWh: '1000',
-          energiaSCEEKWh: '200',
-          energiaCompensadaGDIKWh: '50',
-          energiaEletricaReais: '500',
-          energiaSCEEReais: '100',
-          contribuicaoIlumPublica: '50',
-          energiaCompensadaGDIReais: '30',
-        },
-        {
-          numeroCliente: '123456',
-          energiaEletricaKWh: '1200',
-          energiaSCEEKWh: '180',
-          energiaCompensadaGDIKWh: '40',
-          energiaEletricaReais: '600',
-          energiaSCEEReais: '90',
-          contribuicaoIlumPublica: '60',
-          energiaCompensadaGDIReais: '35',
-        },
-      ];
-  
-      (energyBillsRepository.find as jest.Mock).mockResolvedValue(mockEnergyBills);
-  
-      const result = await energyBillsService.getEnergyBillingDataForCharts('123456');
-  
-      const expectedProcessedData = [
-        {
-          numeroCliente: '123456',
-          consumoEnergiaEletricaKWh: 1000 + 200,
+          numeroCliente: '123',
+          consumoEnergiaEletricaKWh: 600,
           energiaCompensadaKWh: 50,
-          valorTotalSemGDReais: 500 + 100 + 50,
-          economiaGDReais: 30,
+          valorTotalSemGDReais: 310,
+          economiaGDReais: 25,
         },
         {
-          numeroCliente: '123456',
-          consumoEnergiaEletricaKWh: 1200 + 180,
-          energiaCompensadaKWh: 40,
-          valorTotalSemGDReais: 600 + 90 + 60,
-          economiaGDReais: 35,
-        },
+          numeroCliente: '123',
+          consumoEnergiaEletricaKWh: 660,
+          energiaCompensadaKWh: 55,
+          valorTotalSemGDReais: 341,
+          economiaGDReais: 27.5
+        }
       ];
-  
-      expect(result).toEqual(expectedProcessedData);
-      expect(energyBillsRepository.find).toHaveBeenCalledWith({ where: { numeroCliente: '123456' } });
+
+      expect(processedData).toEqual(expectedData);
     });
-  
-    it('should return processed energy billing data for charts without client number filter', async () => {
-      const mockEnergyBills = [
+
+    it('should return processed energy billing data for all clients when no client number is provided', async () => {
+      mockRepository['energyBills'] = mockEnergyBills;
+
+      const processedData = await energyBillsService.getEnergyBillingDataForCharts();
+
+      const expectedData = [
         {
-          numeroCliente: '789012',
-          energiaEletricaKWh: '1500',
-          energiaSCEEKWh: '300',
-          energiaCompensadaGDIKWh: '70',
-          energiaEletricaReais: '700',
-          energiaSCEEReais: '150',
-          contribuicaoIlumPublica: '80',
-          energiaCompensadaGDIReais: '40',
+          numeroCliente: '123',
+          consumoEnergiaEletricaKWh: 600,
+          energiaCompensadaKWh: 50,
+          valorTotalSemGDReais: 310.00,
+          economiaGDReais: 25.00,
         },
         {
-          numeroCliente: '789012',
-          energiaEletricaKWh: '1300',
-          energiaSCEEKWh: '280',
-          energiaCompensadaGDIKWh: '60',
-          energiaEletricaReais: '650',
-          energiaSCEEReais: '120',
-          contribuicaoIlumPublica: '70',
-          energiaCompensadaGDIReais: '45',
-        },
-      ];
-  
-      (energyBillsRepository.find as jest.Mock).mockResolvedValue(mockEnergyBills);
-  
-      const result = await energyBillsService.getEnergyBillingDataForCharts();
-  
-      const expectedProcessedData = [
-        {
-          numeroCliente: '789012',
-          consumoEnergiaEletricaKWh: 1500 + 300,
-          energiaCompensadaKWh: 70,
-          valorTotalSemGDReais: 700 + 150 + 80,
-          economiaGDReais: 40,
-        },
-        {
-          numeroCliente: '789012',
-          consumoEnergiaEletricaKWh: 1300 + 280,
+          numeroCliente: '456',
+          consumoEnergiaEletricaKWh: 720,
           energiaCompensadaKWh: 60,
-          valorTotalSemGDReais: 650 + 120 + 70,
-          economiaGDReais: 45,
+          valorTotalSemGDReais: 372.00,
+          economiaGDReais: 30.00,
         },
+        {
+          numeroCliente: '123',
+          consumoEnergiaEletricaKWh: 660,
+          energiaCompensadaKWh: 55,
+          valorTotalSemGDReais: 341,
+          economiaGDReais: 27.5
+        }
       ];
-  
-      expect(result).toEqual(expectedProcessedData);
-      expect(energyBillsRepository.find).toHaveBeenCalled();
+
+      expect(processedData).toEqual(expectedData);
     });
   });
 });
-

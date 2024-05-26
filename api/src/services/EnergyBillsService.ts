@@ -28,8 +28,8 @@ export class EnergyBillsService {
     const [data, total] = await this.energyBillsRepository.findAndCount(queryOptions);
     return { data, total };
   }
-  
 
+  
   async getEnergyBillingDataForCharts(numeroCliente?: string): Promise<EnergyBillChartsDto[]> {
     let energyBills;
 
