@@ -102,7 +102,7 @@ const Dashboard: React.FC = () => {
     setSelectedClient(event.target.value);
   };
 
-  const valueFormatter = (value: number | null) => `${value}mm`;
+  const valueFormatter = (value: number | null) => `${value}`;
 
   return (
     <MainLayout>
