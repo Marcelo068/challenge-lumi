@@ -5,13 +5,13 @@ O projeto visa extrair informações de documentos PDF utilizando inteligência 
 
 ## Tecnologias Utilizadas
 ### Front-end
-- React: Framework JavaScript para construção da interface do usuário.
-- TypeScript: Superset de JavaScript que adiciona tipagem estática ao código.
-- Material-UI: Biblioteca de componentes React para um design consistente e responsivo.
+- **React**: Framework JavaScript para construção da interface do usuário.
+- **TypeScript**: Superset de JavaScript que adiciona tipagem estática ao código.
+- **Material-UI**: Biblioteca de componentes React para um design consistente e responsivo.
 ### Back-end
-- Node.js: Ambiente de execução JavaScript server-side.
-- TypeORM: ORM (Object-Relational Mapping) para TypeScript e JavaScript.
-- PostgreSQL: Sistema de gerenciamento de banco de dados relacional.
+- **Node.js**: Ambiente de execução JavaScript server-side.
+- **TypeORM**: ORM (Object-Relational Mapping) para TypeScript e JavaScript.
+- **PostgreSQL**: Sistema de gerenciamento de banco de dados relacional.
 
 ## Intruções
 ### Front-end
@@ -25,6 +25,6 @@ Após configurar as credenciais, há duas alternativas para os dados:
 - **Alternativa 1 (Script)**:
 Após executar "npm i", inicie o servidor com "npm run start:dev", o que iniciará o banco de dados via TypeORM, desde que as credenciais no "data-source.ts" estejam corretas. Em seguida, execute o script localizado em "\api\src\scripts\InsertEnergyBills.ts" com o comando "ts-node InsertEnergyBills.ts" em outra linha de comando. É importante mencionar que é necessário uma "api_key" do ChatGPT para que o script funcione corretamente, pois envolve categorização utilizando inteligência artificial.
 
-- Alternativa 2 (Restore do Banco):
+- **Alternativa 2 (Restore do Banco)**:
 Após executar "npm i", faça a restauração do banco de dados. Para isso, crie um banco de dados no PostgreSQL e utilize o arquivo localizado em "\api\dump\challenge-lumi-database" para realizar o restore. Após a restauração, inicie a API com "npm run start:dev".
 
