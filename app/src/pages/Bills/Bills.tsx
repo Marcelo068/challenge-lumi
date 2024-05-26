@@ -104,7 +104,7 @@ const Bills: React.FC = () => {
           onChange={handleFilterChange}
           fullWidth
           margin="normal"
-          sx={{ mb: 2 }} // Ajuste de espaçamento inferior
+          sx={{ mb: 2 }} 
         />
         {items.length === 0 ? (
           <Typography variant="body1">Não há itens para exibir.</Typography>

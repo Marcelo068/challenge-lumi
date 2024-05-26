@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ReceiptIcon from '@mui/icons-material/Receipt';
-import WorkIcon from '@mui/icons-material/Work'; // Ícone de projeto do Material-UI
+import WorkIcon from '@mui/icons-material/Work';
 
 const drawerWidth = 240;
 
@@ -31,15 +31,15 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: drawerWidth,
-            backgroundColor: '#121621', // Cor da sidebar
-            color: '#b3b9c6', // Cor padrão do texto
+            backgroundColor: '#121621', 
+            color: '#b3b9c6', 
             boxSizing: 'border-box',
           },
         }}
       >
         <Toolbar>
           <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '20px' }}>
-            <WorkIcon sx={{ fontSize: '2rem', marginRight: '10px', color: '#b3b9c6' }} /> {/* Ícone de projeto */}
+            <WorkIcon sx={{ fontSize: '2rem', marginRight: '10px', color: '#b3b9c6' }} /> 
             <h2 style={{ color: '#b3b9c6', fontSize: '1.2rem' }}>Projeto</h2>
           </div>
         </Toolbar>
@@ -55,7 +55,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               margin: '10px 0px',
             }}
           >
-            <DashboardIcon sx={{ marginRight: '10px' }} /> {/* Ícone do Dashboard */}
+            <DashboardIcon sx={{ marginRight: '10px' }} /> 
             <ListItemText primary="Dashboard" />
           </ListItem>
           <ListItem
@@ -68,7 +68,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               margin: '10px 0px',
             }}
           >
-            <ReceiptIcon sx={{ marginRight: '10px' }} /> {/* Ícone de Bills */}
+            <ReceiptIcon sx={{ marginRight: '10px' }} />
             <ListItemText primary="Bills" />
           </ListItem>
         </List>

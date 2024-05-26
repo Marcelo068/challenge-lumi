@@ -38,12 +38,6 @@ export class EnergyBills {
   @Column({ name: 'numero_da_instalacao', nullable: true })
   numeroInstalacao: string;
 
-  // @Column({ name: 'cep', nullable: true })
-  // cep: string;
-
-  // @Column({ name: 'endereco', nullable: true })
-  // endereco: string;
-
   @Column({ name: 'data_de_emissao', nullable: true })
   dataEmissao: string;
 

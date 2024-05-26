@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { EnergyBills } from '../../entitys/EnergyBillsEntity';
+import { EnergyBills } from '../entitys/EnergyBillsEntity';
 
 export class MockEnergyBillsRepository {
   private energyBills: EnergyBills[] = [];

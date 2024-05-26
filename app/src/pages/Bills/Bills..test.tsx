@@ -1,5 +1,3 @@
-// Bills.test.tsx
-import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import axios from 'axios';
 import Bills from './Bills';
@@ -87,23 +85,21 @@ describe('Bills', () => {
 
     await waitFor(() => {
       const downloadButtons = screen.getAllByText('Baixar Arquivo');
-      expect(downloadButtons.length).toBeGreaterThan(0); // Verifica se há pelo menos um botão de download na tela
+      expect(downloadButtons.length).toBeGreaterThan(0); 
     });
 
     const downloadButtons = screen.getAllByText('Baixar Arquivo');
-    const firstDownloadButton = downloadButtons[0]; // Supondo que haja apenas um botão de download para simplificar o exemplo
+    const firstDownloadButton = downloadButtons[0];
 
-    // Simulando o clique no botão de download
     await act(async () => {
       fireEvent.click(firstDownloadButton);
     });
 
-    // Não vamos simular o download real, vamos verificar se o evento de clique foi disparado corretamente
+    // Let's not simulate the actual download, let's check if the click event was fired correctly
     expect(mockedAxios.get).toHaveBeenCalledWith(`${process.env.REACT_APP_API_URL}/energy-bills`, {
       params: { skip: 0, take: 10, numeroCliente: '' },
     });
 
-    // Verifica se o evento de clique foi disparado no botão de download
     expect(firstDownloadButton).toBeInTheDocument();
   });
 });

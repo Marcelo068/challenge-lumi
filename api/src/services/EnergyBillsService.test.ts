@@ -141,13 +141,15 @@ describe('EnergyBillsService', () => {
           energiaCompensadaKWh: 50,
           valorTotalSemGDReais: 310,
           economiaGDReais: 25,
+          dataEmissao: '2023-01-05'
         },
         {
           numeroCliente: '123',
           consumoEnergiaEletricaKWh: 660,
           energiaCompensadaKWh: 55,
           valorTotalSemGDReais: 341,
-          economiaGDReais: 27.5
+          economiaGDReais: 27.5,
+          dataEmissao: '2023-03-05'
         }
       ];
 
@@ -166,6 +168,7 @@ describe('EnergyBillsService', () => {
           energiaCompensadaKWh: 50,
           valorTotalSemGDReais: 310.00,
           economiaGDReais: 25.00,
+          dataEmissao: '2023-01-05'
         },
         {
           numeroCliente: '456',
@@ -173,13 +176,15 @@ describe('EnergyBillsService', () => {
           energiaCompensadaKWh: 60,
           valorTotalSemGDReais: 372.00,
           economiaGDReais: 30.00,
+          dataEmissao: '2023-02-05'
         },
         {
           numeroCliente: '123',
           consumoEnergiaEletricaKWh: 660,
           energiaCompensadaKWh: 55,
           valorTotalSemGDReais: 341,
-          economiaGDReais: 27.5
+          economiaGDReais: 27.5,
+          dataEmissao: '2023-03-05'
         }
       ];
 
