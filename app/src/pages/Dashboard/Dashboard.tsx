@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Grid, Box, TextField } from '@mui/material';
+import { BarChart } from '@mui/x-charts/BarChart';
 
 import MainLayout from '../../layouts/MainLayout';
-import { BarChart } from '@mui/x-charts/BarChart';
-import { Box, TextField } from '@mui/material';
 
 const Dashboard: React.FC = () => {
   const [energyData, setEnergyData] = useState<any[]>([]);
@@ -53,36 +53,46 @@ const Dashboard: React.FC = () => {
 
   return (
     <MainLayout>
-      <h1>Welcome to the Dashboard Page</h1>
-      <Box sx={{ p: 3 }}>
-        <TextField
-          label="Número do Cliente"
-          variant="outlined"
-          value={selectedClient}
-          onChange={handleClientChange}
-        />
-      </Box>
-      <Box sx={{ p: 3 }}>
-        <BarChart
-          series={[
-            { data: [totals.totalConsumoEnergiaKWh, totals.totalEnergiaCompensadaKWh] },
-          ]}
-          height={290}
-          xAxis={[{ data: ['Consumo de Energia Elétrica', 'Energia Compensada'], scaleType: 'band' }]}
-          margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
-        />
-      </Box>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6}>
+          <Box sx={{ p: 2 }}>
+            <TextField
+              fullWidth
+              label="Número do Cliente"
+              variant="outlined"
+              value={selectedClient}
+              onChange={handleClientChange}
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <Box sx={{ p: 2 }}>
+            <BarChart
+              series={[
+                { data: [totals.totalConsumoEnergiaKWh, totals.totalEnergiaCompensadaKWh] },
+              ]}
+              height={290}
+              xAxis={[{ data: ['Consumo de Energia Elétrica', 'Energia Compensada'], scaleType: 'band' }]}
+              margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
+              colors={['#2196f3', '#4caf50']}
+            />
 
-      <Box sx={{ p: 3 }}>
-        <BarChart
-          series={[
-            { data: [totals.totalValorSemGDReais, totals.totalEconomiaGDReais] },
-          ]}
-          height={290}
-          xAxis={[{ data: ['Valor Total sem GD', 'Economia GD'], scaleType: 'band' }]}
-          margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
-        />
-      </Box>
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <Box sx={{ p: 2 }}>
+            <BarChart
+              series={[
+                { data: [totals.totalValorSemGDReais, totals.totalEconomiaGDReais] },
+              ]}
+              height={290}
+              xAxis={[{ data: ['Valor Total sem GD', 'Economia GD'], scaleType: 'band' }]}
+              margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
+              colors={['#2196f3', '#4caf50']}
+            />
+          </Box>
+        </Grid>
+      </Grid>
     </MainLayout>
   );
 };

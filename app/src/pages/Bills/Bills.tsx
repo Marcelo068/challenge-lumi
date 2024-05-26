@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import {
-  List,
-  ListItem,
-  Pagination,
   Box,
-  Button,
   Typography,
   TextField,
   Card,
   CardHeader,
   CardContent,
-  CardActions
+  List,
+  ListItem,
+  Pagination,
+  IconButton,
+  Divider,
+  Tooltip
 } from '@mui/material';
-import axios from 'axios';
+import {
+  CloudDownload as DownloadIcon,
+  Event as EventIcon,
+  MonetizationOn as MonetizationIcon
+} from '@mui/icons-material';
 
 import MainLayout from '../../layouts/MainLayout';
+import axios from 'axios';
 
 interface Item {
   id: string;
@@ -45,7 +51,7 @@ const Bills: React.FC = () => {
           params: {
             skip: skip,
             take: take,
-            numeroCliente: clienteFilter // Passar o filtro por cliente
+            numeroCliente: clienteFilter
           }
         });
 
@@ -90,7 +96,7 @@ const Bills: React.FC = () => {
 
   return (
     <MainLayout>
-      <Box>
+      <Box p={2} sx={{ marginBottom: 2 }}>
         <TextField
           label="Número do Cliente"
           variant="outlined"
@@ -98,6 +104,7 @@ const Bills: React.FC = () => {
           onChange={handleFilterChange}
           fullWidth
           margin="normal"
+          sx={{ mb: 2 }} // Ajuste de espaçamento inferior
         />
         {items.length === 0 ? (
           <Typography variant="body1">Não há itens para exibir.</Typography>
@@ -105,34 +112,38 @@ const Bills: React.FC = () => {
           <>
             <List>
               {items.map(item => (
-                <ListItem key={item.id}>
-                  <Card style={{ width: '100%' }}>
-                    <CardHeader
-                      title={`Cliente: ${item.numeroCliente}`}
-                      subheader={`Instalação: ${item.numeroInstalacao} - Mês: ${item.mesReferencia}`}
-                    />
-                    <CardContent>
-                      <Typography variant="body2" color="textSecondary">
-                        Data de Emissão: {item.dataEmissao}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        Vencimento: {item.vencimento}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        Total a Pagar: {item.totalPagar}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => handleDownload(`${process.env.REACT_APP_API_URL}/files/${item.fileName}`)}
-                      >
-                        Baixar Arquivo
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </ListItem>
+                <React.Fragment key={item.id}>
+                  <ListItem alignItems="flex-start" disableGutters>
+                    <Card sx={{ width: '100%' }}>
+                      <CardHeader
+                        title={`Cliente: ${item.numeroCliente}`}
+                        subheader={`Instalação: ${item.numeroInstalacao} - Mês: ${item.mesReferencia}`}
+                        action={
+                          <Tooltip title="Baixar Arquivo">
+                            <IconButton
+                              color="primary"
+                              onClick={() => handleDownload(`${process.env.REACT_APP_API_URL}/files/${item.fileName}`)}
+                            >
+                              <DownloadIcon />
+                            </IconButton>
+                          </Tooltip>
+                        }
+                      />
+                      <CardContent>
+                        <Typography variant="body2" color="textSecondary" sx={{ display: 'flex', alignItems: 'center' }}>
+                          <EventIcon sx={{ mr: 1 }} fontSize="small" /> Data de Emissão: {item.dataEmissao}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" sx={{ display: 'flex', alignItems: 'center' }}>
+                          <EventIcon sx={{ mr: 1 }} fontSize="small" /> Vencimento: {item.vencimento}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" sx={{ display: 'flex', alignItems: 'center' }}>
+                          <MonetizationIcon sx={{ mr: 1 }} fontSize="small" /> Total a Pagar: {item.totalPagar}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </ListItem>
+                  <Divider variant="inset" component="li" />
+                </React.Fragment>
               ))}
             </List>
             {totalItems > 0 && (
@@ -141,6 +152,7 @@ const Bills: React.FC = () => {
                 page={page}
                 onChange={handlePageChange}
                 color="primary"
+                sx={{ marginTop: 2 }}
               />
             )}
           </>
