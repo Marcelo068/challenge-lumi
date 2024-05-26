@@ -1,5 +1,8 @@
 # challenge-lumi
 
+## Objetos do Projeto
+O projeto visa extrair informações de documentos PDF utilizando inteligência artificial, categorizando os dados e apresentando-os através de um dashboard intuitivo, além de disponibilizar funcionalidades de download dos arquivos processados.
+
 ## Tecnologias Utilizadas
 ### Front-end
 - React: Framework JavaScript para construção da interface do usuário.
@@ -9,3 +12,6 @@
 - Node.js: Ambiente de execução JavaScript server-side.
 - TypeORM: ORM (Object-Relational Mapping) para TypeScript e JavaScript.
 - PostgreSQL: Sistema de gerenciamento de banco de dados relacional.
+
+## Intruções
+### Front-end
