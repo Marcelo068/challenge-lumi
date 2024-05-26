@@ -40,6 +40,7 @@ export class EnergyBillsService {
     }
 
     const processedEnergyBills = energyBills.map(bill => {
+      const dataEmissao = bill.dataEmissao;
       const numeroCliente = bill.numeroCliente
       const energiaEletricaKWh = parseFloat(bill.energiaEletricaKWh);
       const energiaSCEEKWh = parseFloat(bill.energiaSCEEKWh);
@@ -62,6 +63,7 @@ export class EnergyBillsService {
         energiaCompensadaKWh,
         valorTotalSemGDReais,
         economiaGDReais,
+        dataEmissao
       };
     });
 
