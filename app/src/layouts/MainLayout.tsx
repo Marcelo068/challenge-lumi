@@ -1,28 +1,3 @@
-// import React from 'react';
-// import Header from '../components/Header/Header';
-// import Sidebar from '../components/Sidebar/Sidebar';
-// import Footer from '../components/Footer/Footer';
-// import styles from './MainLayout.module.css'; // Estilos globais para o layout
-
-// interface MainLayoutProps {
-//   children: React.ReactNode;
-// }
-
-// const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
-//   return (
-//     <div className={styles.mainLayout}>
-//       <Sidebar />
-//       <div className={styles.content}>
-//         <Header />
-//         <main>{children}</main>
-//       <Footer />
-
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default MainLayout;
 import React from 'react';
 
 import { Link, useLocation } from 'react-router-dom';
