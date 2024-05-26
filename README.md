@@ -15,3 +15,6 @@ O projeto visa extrair informações de documentos PDF utilizando inteligência 
 
 ## Intruções
 ### Front-end
+Para configurar o frontend, basta executar "npm i" seguido de "npm start". Isso será suficiente para iniciar a aplicação. Para executar os testes, utilize o comando "npm test".
+
+### Back-end
