@@ -23,7 +23,8 @@ Para configurar o backend, execute "npm i" e depois ajuste o arquivo "data-sourc
 Após configurar as credenciais, há duas alternativas para os dados :
 
 - **Alternativa 1 (Script)**:
-Após executar "npm i", inicie o servidor com "npm run start:dev", o que iniciará o banco de dados via TypeORM, desde que as credenciais no "data-source.ts" estejam corretas. Em seguida, execute o script localizado em "\api\src\scripts\InsertEnergyBills.ts" com o comando "ts-node InsertEnergyBills.ts" em outra linha de comando. É importante mencionar que é necessário uma "api_key" do ChatGPT para que o script funcione corretamente, pois envolve categorização utilizando inteligência artificial.
+Após executar "npm i", inicie o servidor com "npm run start:dev" para iniciar o banco de dados via TypeORM, assegurando que as credenciais no arquivo "data-source.ts" estejam corretas. Em seguida, crie um arquivo .env e defina a variável de ambiente API_KEY, inserindo a chave da API do ChatGPT.
+Para inserir dados de faturas de energia, execute o script localizado em "\api\src\scripts\InsertEnergyBills.ts" usando o comando "ts-node InsertEnergyBills.ts" em outra linha de comando. É crucial ter uma chave de API do ChatGPT para que o script funcione corretamente.
 
 - **Alternativa 2 (Restore do Banco)**:
 Após executar "npm i", faça a restauração do banco de dados. Para isso, crie um banco de dados no PostgreSQL e utilize o arquivo localizado em "\api\dump\challenge-lumi-database" para realizar o restore. Após a restauração, inicie a API com "npm run start:dev".
