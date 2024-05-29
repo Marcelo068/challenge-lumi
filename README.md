@@ -5,7 +5,7 @@ O projeto visa extrair informações de documentos PDF utilizando inteligência 
 
 ## Tecnologias Utilizadas
 ### Front-end
-- **React**: Framework JavaScript para construção da interface do usuário.
+- **React**: Poderosa biblioteca para construção de interfaces visuais em JavaScript.
 - **TypeScript**: Superset de JavaScript que adiciona tipagem estática ao código.
 - **Material-UI**: Biblioteca de componentes React para um design consistente e responsivo.
 ### Back-end
